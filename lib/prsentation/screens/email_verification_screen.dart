@@ -17,29 +17,33 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            SizedBox(height: 100,),
-            AppLogo(),
-            SizedBox(height: 16,),
-            Text('Welcome Back', style: textTheme.headlineLarge,),
-            SizedBox(height: 4,),
-            Text('Please enter your email address', style: textTheme.headlineSmall,),
-            SizedBox(height: 24,),
-            TextFormField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                hintText: 'Email',
-              ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: [
+                SizedBox(height: 100,),
+                AppLogo(),
+                SizedBox(height: 16,),
+                Text('Welcome Back', style: textTheme.headlineLarge,),
+                SizedBox(height: 4,),
+                Text('Please enter your email address', style: textTheme.headlineSmall,),
+                SizedBox(height: 24,),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    hintText: 'Email',
+                  ),
+                ),
+                SizedBox(height: 16,),
+                ElevatedButton(
+                  onPressed: () {
+                  Get.to(()=>OtpVerificationScreen(email: _emailController.text,));
+                }, child: Text('Next'))
+              ],
             ),
-            SizedBox(height: 16,),
-            ElevatedButton(
-              onPressed: () {
-              Get.to(()=>OtpVerificationScreen(email: _emailController.text,));
-            }, child: Text('Next'))
-          ],
+          ),
         ),
       ),
     );
