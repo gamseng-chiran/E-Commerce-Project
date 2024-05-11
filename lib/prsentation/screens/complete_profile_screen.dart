@@ -1,5 +1,8 @@
+import 'package:e_commerce/prsentation/screens/main_bottom_nav_screen.dart';
 import 'package:e_commerce/prsentation/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 class CompleteProfileScreen extends StatefulWidget {
   const CompleteProfileScreen({super.key});
@@ -36,6 +39,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 SizedBox(height: 16,),
                 ElevatedButton(
                   onPressed: () {
+                    Get.to(()=>MainBottomNavScreen());
                 }, child: Text('Complete'))
               ],
             ),
