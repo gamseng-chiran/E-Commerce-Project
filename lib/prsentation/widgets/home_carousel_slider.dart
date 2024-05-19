@@ -1,12 +1,16 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:e_commerce/prsentation/utility/app_colors.dart';
+import 'package:e_commerce/data/models/slider_data.dart';
 import 'package:flutter/material.dart';
+
+import 'package:e_commerce/prsentation/utility/app_colors.dart';
 
 class HomeCarouselSlider extends StatefulWidget {
   const HomeCarouselSlider({
     Key? key,
+    required this.sliderList,
   }) : super(key: key);
-
+  final List<SliderData> sliderList;
   @override
   State<HomeCarouselSlider> createState() => _HomeCarouselSliderState();
 }
@@ -31,7 +35,7 @@ class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
           return Row( 
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              for(int i=0; i<5; i++ )
+              for(int i=0; i<widget.sliderList.length; i++ )
               Container(
                 width: 15,
                 height: 15,
@@ -53,7 +57,7 @@ class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
         options: CarouselOptions(height: 180.0,viewportFraction: 1, onPageChanged: (index, _) {
           _selectedPageIndex.value = index;
         },),
-        items: [1, 2, 3, 4, 5].map((i) {
+        items: widget.sliderList.map((i) {
           return Builder(
             builder: (BuildContext context) {
               return Container(
