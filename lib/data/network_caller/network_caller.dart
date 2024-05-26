@@ -13,6 +13,7 @@ class NetworkCaller{
       log(url);
       final Response response =await get(Uri.parse(url));
       log(response.statusCode.toString());
+      log(response.body.toString());
       if(response.statusCode==200){
         final decodeData = jsonDecode(response.body);
         return NetworkResponse(responseCode: response.statusCode, 
@@ -36,9 +37,11 @@ class NetworkCaller{
 
   static Future<NetworkResponse> postRequest({required String url, Map<String, dynamic>? body}) async{
     try{
+      log(url);
       final Response response =await post(Uri.parse(url),
       headers: {'accept':'application/json'}, body: body);
-      log(url);
+      log(response.statusCode.toString());
+      log(response.body.toString());
       if(response.statusCode==200){
         final decodeData = jsonDecode(response.body);
         return NetworkResponse(responseCode: response.statusCode, 

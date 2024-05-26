@@ -38,9 +38,12 @@ class _WishListScreenState extends State<WishListScreen> {
           itemBuilder: (context, index) {
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-              child: FittedBox(child: ProductCard(
-                showAddToWishList: false,
-              )));
+              child: FittedBox(
+              //   child: ProductCard(
+              //   showAddToWishList: false,
+              // ),
+              ),
+              );
           }),
       ),
     );

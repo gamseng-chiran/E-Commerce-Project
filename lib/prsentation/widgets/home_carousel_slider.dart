@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:e_commerce/data/models/slider_data.dart';
+import 'package:e_commerce/prsentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:e_commerce/prsentation/utility/app_colors.dart';
@@ -57,7 +58,7 @@ class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
         options: CarouselOptions(height: 180.0,viewportFraction: 1, onPageChanged: (index, _) {
           _selectedPageIndex.value = index;
         },),
-        items: widget.sliderList.map((i) {
+        items: widget.sliderList.map((slider) {
           return Builder(
             builder: (BuildContext context) {
               return Container(
@@ -66,13 +67,62 @@ class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
                   decoration: BoxDecoration(color: AppColors.primaryColor, 
                   borderRadius: BorderRadius.circular(8)),
                   alignment: Alignment.center,
-                  child: Text(
-                    'text $i',
-                    style: TextStyle(fontSize: 16.0),
-                  ));
+                  child: Stack(children: [
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: NetworkImageWidget(
+                          url:slider.image ?? '',
+                          height: double.maxFinite,
+                          width: double.maxFinite,
+                          boxFit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: _buildProductDescription(slider),
+                    )
+                  ],)
+                  );
             },
           );
         }).toList(),
       );
+  }
+
+  Widget _buildProductDescription(SliderData slider) {
+    return Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                        Text(slider.title??'', style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600
+                        ),),
+                        Text(slider.shortDes ?? '',maxLines: 3,
+                        style: TextStyle(
+                          color: Colors.black,
+                          overflow: TextOverflow.ellipsis
+                        ),),
+                        SizedBox(height: 8,),
+                        SizedBox(
+                          width: 80,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: AppColors.primaryColor,
+                              padding: EdgeInsets.symmetric(vertical: 6),
+                              textStyle: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold
+                              )
+                            ),
+                            onPressed: (){}, child: Text('Buy now')))
+                      ],),
+                    );
   }
 }

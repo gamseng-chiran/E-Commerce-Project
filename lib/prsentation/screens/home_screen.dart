@@ -1,5 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:e_commerce/data/models/category.dart';
+import 'package:e_commerce/data/models/product_model.dart';
+import 'package:e_commerce/prsentation/state_holders/category_list_controller.dart';
 import 'package:e_commerce/prsentation/state_holders/home_slider_controller.dart';
+import 'package:e_commerce/prsentation/state_holders/main_bottom_nav_bar_controller.dart';
+import 'package:e_commerce/prsentation/state_holders/popular_product_list_controller.dart.dart';
+import 'package:e_commerce/prsentation/state_holders/special_product_list_controller.dart';
 import 'package:e_commerce/prsentation/widgets/category_item.dart';
 import 'package:e_commerce/prsentation/widgets/centered_circular_progress_indicator.dart';
 import 'package:e_commerce/prsentation/widgets/product_card.dart';
@@ -55,32 +61,72 @@ class _HomeScreenState extends State<HomeScreen> {
               SectionHeader(
                 title: 'All category',
                 onTapSeeAll: () {
-                  
+                  Get.find<MainBottomNavBarController>().selectCategory();
                 },
               ),
               SizedBox(height: 10,),
-              _buildCategoryListView(),
+              GetBuilder<CategoryListController>(
+                builder: (categoryListController) {
+                  if(categoryListController.inProgress){
+                    return SizedBox(
+                      height: 200,
+                      child: CenteredCircularProgressIndicator()
+                    );
+                  }
+                  return _buildCategoryListView(categoryListController.categoryList);
+                }
+              ),
               SizedBox(height: 8,),
               SectionHeader(
                 title: 'Popular products',
                 onTapSeeAll: () {
                 },
               ),
-              _buildProductListView(),
+              GetBuilder<SpecialProductListController>(
+                builder: (specialProductListController) {
+                  if(specialProductListController.specialProductInProgress){
+                    return SizedBox(
+                      height: 210,
+                      child: CenteredCircularProgressIndicator()
+                    );
+                  }
+                  return _buildProductListView(specialProductListController.productList);
+                }
+              ),
               SizedBox(height: 8,),
               SectionHeader(
                 title: 'Special',
                 onTapSeeAll: () {
                 },
               ),
-              _buildProductListView(),
+              GetBuilder<SpecialProductListController>(
+                builder: (specialProductListController) {
+                  if(specialProductListController.specialProductInProgress){
+                    return SizedBox(
+                      height: 210,
+                      child: CenteredCircularProgressIndicator()
+                    );
+                  }
+                  return _buildProductListView(specialProductListController.productList);
+                }
+              ),
               SizedBox(height: 8,),
               SectionHeader(
                 title: 'New',
                 onTapSeeAll: () {
                 },
               ),
-              _buildProductListView(),
+              GetBuilder<PopularProductListController>(
+                builder: (popularProductListController) {
+                  if(popularProductListController.popularProductInProgress){
+                    return SizedBox(
+                      height: 210,
+                      child: CenteredCircularProgressIndicator()
+                    );
+                  }
+                  return _buildProductListView(popularProductListController.productList);
+                }
+              ),
             ],
           ),
         ),
@@ -88,35 +134,27 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildCategoryListView() {
-    return SizedBox(
-              height: 120,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: 8,
-                itemBuilder: (context, index){
-                return CategoryItem();
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return SizedBox(width: 16,);
-              },
-              ),
-            );
+  Widget _buildCategoryListView(List<Category> categoryList) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children:
+        categoryList.map((e) => Row(
+          children: [CategoryItem(category: e),
+          const SizedBox(width: 8,),]
+        ),).toList()
+      ),
+    );
   }
-  Widget _buildProductListView() {
-    return SizedBox(
-              height: 235,
-              child: ListView.separated(
+  Widget _buildProductListView(List<Product> productList) {
+    return SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                itemCount: 8,
-                itemBuilder: (context, index){
-                return ProductCard();
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return SizedBox(width: 8,);
-              },
-              ),
-            );
+                child: Row(children: 
+                  productList.map((e) => ProductCard(product: e)).toList(),
+                ),
+              );
+            
   }
 
   Widget _buildSearchTextField() {
