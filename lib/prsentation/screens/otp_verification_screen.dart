@@ -1,17 +1,26 @@
 import 'package:e_commerce/prsentation/screens/complete_profile_screen.dart';
+import 'package:e_commerce/prsentation/state_holders/verify_otp_controller.dart';
 import 'package:e_commerce/prsentation/utility/app_colors.dart';
 import 'package:e_commerce/prsentation/widgets/app_logo.dart';
+import 'package:e_commerce/prsentation/widgets/centered_circular_progress_indicator.dart';
+import 'package:e_commerce/prsentation/widgets/snack_message.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../controller/otp_verification_controller.dart';
 
-class OtpVerificationScreen extends StatelessWidget {
+class OtpVerificationScreen extends StatefulWidget {
   final String email;
   OtpVerificationScreen({Key? key, required this.email}) : super(key: key);
 
+  @override
+  State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
+}
+
+class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final controller = Get.put(OtpVerificationController());
+  TextEditingController _otpController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +57,32 @@ class OtpVerificationScreen extends StatelessWidget {
                 SizedBox(
                   height: 16,
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Get.to(() => CompleteProfileScreen());
-                  },
-                  child: Text('Next'),
+                GetBuilder<VerifyOtpController>(
+                  builder: (verifyOtpController) {
+                    if(verifyOtpController.InProgress){
+                      return CenteredCircularProgressIndicator();
+                    }
+                    return ElevatedButton(
+                      onPressed: () async{
+                        final result = verifyOtpController.verifyOtp(widget.email, _otpController.text);
+                        if(result == true){
+                          // To do 
+                          //If succedd then call another api named "readProfiel"
+                            //Create readProfile controller
+                          //Check if data null or not, if null then move to the complete profile screen, then move to home page
+                            //Create complete profile controller
+                          //Otherwise back to home page
+                          Get.to(() => CompleteProfileScreen());
+                        }
+                        else{
+                          if(mounted){
+                            ShowSnackMessage(context, verifyOtpController.errorMessage);
+                          }
+                        }
+                      },
+                      child: Text('Next'),
+                    );
+                  }
                 ),
                 SizedBox(
                   height: 24,
@@ -117,5 +147,11 @@ class OtpVerificationScreen extends StatelessWidget {
       enableActiveFill: true,
       appContext: context,
     );
+  }
+  @override
+  void dispose() {
+    _otpController.dispose();
+    // TODO: implement dispose
+    super.dispose();
   }
 }

@@ -1,8 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:e_commerce/data/models/cart_model.dart';
 import 'package:e_commerce/data/models/product_details_model.dart';
+import 'package:e_commerce/prsentation/state_holders/add_to_cart_controller.dart';
 import 'package:e_commerce/prsentation/state_holders/product_details_controller.dart';
 import 'package:e_commerce/prsentation/widgets/centered_circular_progress_indicator.dart';
-import 'package:e_commerce/prsentation/widgets/color_picker.dart';
 import 'package:e_commerce/prsentation/widgets/size_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,9 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  int _counterValue =1;
+  String? _selectedSize;
+  String? _selectedColor;
   @override
   void initState() {
     // TODO: implement initState
@@ -43,6 +47,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             return Center(child: Text(productDetailsController.errorMessage),);
           }
           ProductDetailsModel productDetails = productDetailsController.productDetailsModel;
+          List<String> colors = productDetails.color?.split(',') ?? [];
+          List<String> sizes = productDetails.size?.split(',') ?? [];
+          _selectedColor = colors.first;
+          _selectedSize = sizes.first;
           return Column(
             children: [
               Expanded(
@@ -78,22 +86,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             fontWeight: FontWeight.w600,
                             fontSize: 16
                           ),),
+                          SizedBox(height: 16,), 
+                          SizePicker(sizes: colors, 
+                          onChanged: (String s){
+                            _selectedColor =s;
+                          },
+                          isRounded: false,),
                           SizedBox(height: 16,),
-                          ColorPicker(colors: [
-                            Colors.black,
-                            Colors.red,
-                            Colors.amber,
-                            Colors.purple,
-                            Colors.blue
-                          ], onChanged: (Color selectedColor){
-                          }), SizedBox(height: 16,),
                           Text('Size', style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16
                           ),),
                           SizedBox(height: 16,),
-                          SizePicker(sizes: productDetails.size?.split(',') ?? [], onChanged: (String s){
-                
+                          SizePicker(sizes: sizes, 
+                          onChanged: (String s){
+                            _selectedSize = s;
                           }),
                           SizedBox(height: 16,),
                           Text('Description', style: TextStyle(
@@ -139,8 +146,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ],
             );
   }
-}
-Widget _buildAddToCartSection(ProductDetailsModel productDetails) {
+  Widget _buildAddToCartSection(ProductDetailsModel productDetails) {
     return Container(
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -156,12 +162,27 @@ Widget _buildAddToCartSection(ProductDetailsModel productDetails) {
             _buildPriceWidget(productDetails),
             SizedBox(
               width: 120,
-              child: ElevatedButton(onPressed: (){}, 
-              child: Text('Add to cart')),
+              child: GetBuilder<AddToCartController>(
+                builder: (addToCartController) {
+                  if(addToCartController.InProgress){
+                    return CenteredCircularProgressIndicator();
+                  }
+                  return ElevatedButton(onPressed: (){
+                    CartModel cartModel = CartModel(
+                    productId: widget.productId,
+                     size: _selectedSize ?? '', 
+                     color: _selectedColor ?? '', 
+                     quantity: _counterValue);
+                     addToCartController.addToCart(cartModel);
+                  }, 
+                  child: Text('Add to cart'));
+                }
+              ),
             )
           ]),
         );
   }
+
 
   Widget _buildPriceWidget(ProductDetailsModel productDetails) {
     return Column(
@@ -177,9 +198,13 @@ Widget _buildAddToCartSection(ProductDetailsModel productDetails) {
               color: AppColors.primaryColor,
               fontWeight: FontWeight.bold,
               fontSize: 24
-            ),)
-          ],);
+            ),
+            ),
+          ],
+          );
   }
+}
+
 
 
 

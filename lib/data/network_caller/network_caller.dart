@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 class NetworkCaller{
-  static Future<NetworkResponse> getRequest({required String url}) async{
+  static Future<NetworkResponse> getRequest({required String url, bool fromAuth = false}) async{
     try{
       log(url);
       final Response response =await get(Uri.parse(url));
@@ -20,7 +20,10 @@ class NetworkCaller{
         isSuccess: true,
         responseData: decodeData);
       }else if(response.statusCode==401){
-        _goToSignInScreen();
+        if(!fromAuth){
+          _goToSignInScreen();
+        }
+        
         return NetworkResponse(responseCode: response.statusCode, 
         isSuccess: false);
       }
@@ -39,7 +42,7 @@ class NetworkCaller{
     try{
       log(url);
       final Response response =await post(Uri.parse(url),
-      headers: {'accept':'application/json'}, body: body);
+      headers: {'accept':'application/json'}, body: jsonEncode(body));
       log(response.statusCode.toString());
       log(response.body.toString());
       if(response.statusCode==200){
