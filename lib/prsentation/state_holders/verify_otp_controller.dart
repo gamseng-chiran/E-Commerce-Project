@@ -13,7 +13,8 @@ class VerifyOtpController extends GetxController{
     bool isSuccess = false;
     _inProgress = true;
     update();
-    final NetworkResponse response= await NetworkCaller.postRequest(url: Urls.verifyOtp(email, otp),
+    final NetworkResponse response= await NetworkCaller.getRequest(url: Urls.verifyOtp(email, otp),
+    fromAuth: true
     );
     if(response.isSuccess){
       await UserAuthController.saveUserToken(response.responseData['data']);

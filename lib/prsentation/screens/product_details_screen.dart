@@ -2,6 +2,7 @@
 import 'package:e_commerce/data/models/cart_model.dart';
 import 'package:e_commerce/data/models/product_details_model.dart';
 import 'package:e_commerce/prsentation/state_holders/add_to_cart_controller.dart';
+import 'package:e_commerce/prsentation/state_holders/add_to_wish_list_controller.dart';
 import 'package:e_commerce/prsentation/state_holders/product_details_controller.dart';
 import 'package:e_commerce/prsentation/widgets/centered_circular_progress_indicator.dart';
 import 'package:e_commerce/prsentation/widgets/size_picker.dart';
@@ -142,7 +143,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ],
                 ),
                 TextButton(onPressed: (){}, child: Text('Review')),
-                WishButton()
+                GetBuilder<AddToWishListController>(
+                  builder: (addToWishListController) {
+                    if(addToWishListController.inProgress){
+                      return Transform.scale(
+                        scale: 0.4,
+                        child: CircularProgressIndicator());
+                    }
+                    return WishButton(showAddToWishList: true,
+                    onTap: () {
+                      addToWishListController.addToWishList(widget.productId);
+                    },);
+                  }
+                )
               ],
             );
   }

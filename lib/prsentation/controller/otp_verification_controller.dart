@@ -4,7 +4,7 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
 class OtpVerificationController extends GetxController {
-  final countdown = 8.obs;
+  final countdown = 60.obs;
   final isResendButtonEnabled = false.obs;
   late Timer _timer;
 
@@ -26,7 +26,7 @@ class OtpVerificationController extends GetxController {
   }
 
   void resetCountdown() {
-    countdown.value = 8;
+    countdown.value = 60;
   }
 
   @override

@@ -1,20 +1,26 @@
 import 'package:e_commerce/data/models/network_response.dart';
+import 'package:e_commerce/data/models/wish_list_item.dart';
+import 'package:e_commerce/data/models/wish_list_model.dart';
 import 'package:e_commerce/data/network_caller/network_caller.dart';
 import 'package:e_commerce/data/utility/urls.dart';
 import 'package:get/get.dart';
 
-class VerifyEmailController extends GetxController{
+class WishListController extends GetxController{
   bool _inProgress = false;
   String _errorMessage = '';
+  List<WishListItem> _wishList = [];
   bool get InProgress => _inProgress;
   String get errorMessage => _errorMessage;
-  Future<bool> verifyEmail(String email) async{
+
+  List<WishListItem> get wishList => _wishList;
+  Future<bool> getWishList() async{
     bool isSuccess = false;
     _inProgress = true;
     update();
-    final NetworkResponse response= await NetworkCaller.getRequest(url: Urls.verifyEmail(email),
+    final NetworkResponse response= await NetworkCaller.getRequest(url: Urls.getWishList
     );
     if(response.isSuccess){
+      _wishList = WishListModel.fromJson(response.responseData).wishList ?? [];
       isSuccess = true;
     }
     else{

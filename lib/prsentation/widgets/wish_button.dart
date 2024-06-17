@@ -7,9 +7,13 @@ import 'package:e_commerce/prsentation/utility/app_colors.dart';
 
 class WishButton extends StatelessWidget {
   final bool showAddToWishList;
+  final bool isSelected;
+  final VoidCallback onTap;
   const WishButton({
     Key? key,
-     this.showAddToWishList = true,
+    this.showAddToWishList = true,
+    this.isSelected = false,
+    required this.onTap,
   }) : super(key: key);
   
 
@@ -18,7 +22,9 @@ class WishButton extends StatelessWidget {
     return Visibility(
       visible: showAddToWishList,
       replacement: _getIconButton(Icons.delete_outline),
-      child: _getIconButton(Icons.favorite_outline_rounded)
+      child: InkWell(
+        onTap: onTap,
+        child: _getIconButton(_getIconData()))
     );
   }
 
@@ -32,5 +38,8 @@ class WishButton extends StatelessWidget {
           color: Colors.white,
         ),
       );
+  }
+  IconData _getIconData (){
+    return isSelected ? Icons.favorite : Icons.favorite_outline_rounded;
   }
 }

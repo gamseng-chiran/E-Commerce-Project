@@ -11,10 +11,10 @@ import '../../data/models/product_model.dart';
 class ProductCard extends StatelessWidget {
   const ProductCard({
     Key? key,
-    // required this.showAddToWishList,
+    this.showAddToWishList = true,
     required this.product,
   }) : super(key: key);
-  // final bool showAddToWishList;
+  final bool showAddToWishList;
   final Product product;
 
   @override

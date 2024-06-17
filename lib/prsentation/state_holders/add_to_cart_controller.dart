@@ -25,6 +25,5 @@ class AddToCartController extends GetxController{
     update();
     return isSuccess;
   }
-
-  void addToCartController(CartModel cartModel) {}
 }
+
