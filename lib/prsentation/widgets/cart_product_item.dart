@@ -1,12 +1,17 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+
+import 'package:e_commerce/data/models/cart_item_model.dart';
 import 'package:e_commerce/prsentation/utility/app_colors.dart';
 import 'package:e_commerce/prsentation/utility/assets_path.dart';
 import 'package:e_commerce/prsentation/widgets/item_count_button.dart';
-import 'package:flutter/material.dart';
 
 class CartProductItem extends StatelessWidget {
   const CartProductItem({
     Key? key,
+    required this.cartItem,
   }) : super(key: key);
+  final CartItemModel cartItem;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +56,7 @@ class CartProductItem extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('\$ 100', 
+                    Text('\$${cartItem.product?.price ?? 0}', 
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -74,11 +79,11 @@ class CartProductItem extends StatelessWidget {
     return Wrap(
                           spacing: 16,
                           children: [
-                            Text('Color: Red',
+                            Text('Color: ${cartItem.color ?? ""}',
                             style: TextStyle(
                               color: Colors.black54
                             ),),
-                            Text('Size: XL',
+                            Text('Size: ${cartItem.size ?? ''}',
                             style: TextStyle(
                               color: Colors.black54
                             ),)
@@ -87,7 +92,7 @@ class CartProductItem extends StatelessWidget {
   }
 
   Widget _buildProductName() {
-    return Text('Nike shoe 43321',
+    return Text('${cartItem.product?.title ?? ''}',
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.black,
