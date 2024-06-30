@@ -157,6 +157,9 @@
 // }
 
 import 'package:e_commerce/prsentation/screens/complete_profile_screen.dart';
+import 'package:e_commerce/prsentation/screens/main_bottom_nav_screen.dart';
+import 'package:e_commerce/prsentation/state_holders/complete_profile_controller.dart';
+import 'package:e_commerce/prsentation/state_holders/read_profile_controller.dart';
 import 'package:e_commerce/prsentation/state_holders/verify_otp_controller.dart';
 import 'package:e_commerce/prsentation/utility/app_colors.dart';
 import 'package:e_commerce/prsentation/widgets/app_logo.dart';
@@ -180,7 +183,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final otpController = Get.put(OtpVerificationController());
   final verifyOtpController = Get.put(VerifyOtpController());
   TextEditingController _otpController = TextEditingController();
-
+  
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -226,6 +229,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         if (_otpController.text.isNotEmpty) {
                           bool result = await verifyOtpController.verifyOtp(widget.email, _otpController.text);
                           if (result) {
+                            // To do 
+//                           //If succed then call another api named "readProfiel"
+//                             //Create readProfile controller  url: base/ReadProfile  get
+//                           //Check if data null or not, if null then move to the complete profile screen, then move to home page
+//                             //Create complete profile controller  url: base/CreateProfile  post
+//                           //Otherwise back to home page
                             Get.to(() => CompleteProfileScreen());
                           } else {
                             if (mounted) {
@@ -237,6 +246,41 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         }
                       },
                       child: Text('Next'),
+  //                         onPressed: () async {
+  //   if (_otpController.text.isNotEmpty) {
+  //     bool result = await verifyOtpController.verifyOtp(widget.email, _otpController.text);
+  //     if (result) {
+  //       // Fetch the profile
+  //       bool profileFetched = await readProfileController.readProfile(widget.email);
+  //       if (profileFetched) {
+  //         if (readProfileController.profile != null) {
+  //           // Check if the profile is complete
+  //           if (readProfileController.profile!.isComplete()) {
+  //             // Profile is complete, navigate to the home page
+  //             Get.to(() => MainBottomNavScreen());
+  //           } else {
+  //             // Profile is incomplete, navigate to the complete profile screen
+  //             Get.to(() => CompleteProfileScreen());
+  //           }
+  //         } else {
+  //           // Profile is null, navigate to the complete profile screen
+  //           Get.to(() => CompleteProfileScreen());
+  //         }
+  //       } else {
+  //         if (mounted) {
+  //           ShowSnackMessage(context, readProfileController.errorMessage);
+  //         }
+  //       }
+  //     } else {
+  //       if (mounted) {
+  //         ShowSnackMessage(context, verifyOtpController.errorMessage);
+  //       }
+  //     }
+  //   } else {
+  //     ShowSnackMessage(context, 'Please enter the OTP');
+  //   }
+  // },
+  // child: Text('Next'),
                     );
                   }
                 ),

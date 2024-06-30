@@ -53,7 +53,7 @@ class _CartScreenState extends State<CartListScreen> {
                   cartItem: cartListController.cartList[index],
                 );
               }),),
-              _buildCheckoutWidget()
+              _buildCheckoutWidget(cartListController.totalPrice)
             ],);
           }
         ),
@@ -61,7 +61,7 @@ class _CartScreenState extends State<CartListScreen> {
     );
   }
 
-  Widget _buildCheckoutWidget() {
+  Widget _buildCheckoutWidget(double totalPrice) {
     return Container(
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -74,7 +74,7 @@ class _CartScreenState extends State<CartListScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-            _buildTotalPriceWidget(),
+            _buildTotalPriceWidget(totalPrice),
             SizedBox(
               width: 100,
               child: ElevatedButton(onPressed: (){}, 
@@ -84,7 +84,7 @@ class _CartScreenState extends State<CartListScreen> {
         );
   }
 
-  Widget _buildTotalPriceWidget() {
+  Widget _buildTotalPriceWidget(double price) {
     return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -93,7 +93,7 @@ class _CartScreenState extends State<CartListScreen> {
               fontWeight: FontWeight.bold,
               color: Colors.grey
             ),),
-            Text('\$100',
+            Text('\$$price',
             style: TextStyle(
               color: AppColors.primaryColor,
               fontWeight: FontWeight.bold,

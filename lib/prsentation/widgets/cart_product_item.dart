@@ -1,17 +1,35 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:e_commerce/prsentation/state_holders/cart_list_controller.dart';
+import 'package:e_commerce/prsentation/state_holders/delete_cart_list_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'package:e_commerce/data/models/cart_item_model.dart';
 import 'package:e_commerce/prsentation/utility/app_colors.dart';
 import 'package:e_commerce/prsentation/utility/assets_path.dart';
 import 'package:e_commerce/prsentation/widgets/item_count_button.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 
-class CartProductItem extends StatelessWidget {
+class CartProductItem extends StatefulWidget {
   const CartProductItem({
     Key? key,
     required this.cartItem,
   }) : super(key: key);
   final CartItemModel cartItem;
+
+  @override
+  State<CartProductItem> createState() => _CartProductItemState();
+}
+
+class _CartProductItemState extends State<CartProductItem> {
+  late int _counterValue;
+  final DeleteCartListController deleteCartListController = Get.find<DeleteCartListController>();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _counterValue = widget.cartItem.qty!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +66,17 @@ class CartProductItem extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () async{
+                        bool isDeleted = await deleteCartListController.deleteCartItem(widget.cartItem.productId!.toString());
+                        if(isDeleted){
+                          Get.find<CartListController>().getCartList();
+                        }
+                        else{
+                          ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(deleteCartListController.errorMessage)),
+                    );
+                        }
+                      },
                       icon: Icon(Icons.delete_outline_sharp),
                     ),
                   ],
@@ -56,7 +84,7 @@ class CartProductItem extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('\$${cartItem.product?.price ?? 0}', 
+                    Text('\$${widget.cartItem.product?.price ?? 0}', 
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -66,7 +94,10 @@ class CartProductItem extends StatelessWidget {
                       minValue: 1,
                       initialValue: 1,
                       onChanged: (value) {
-                        
+                        setState(() {
+                          _counterValue = value;
+                        });
+                        Get.find<CartListController>().changeProductQuantity(widget.cartItem.id!, _counterValue);
                       },
                     ),
                   ],
@@ -79,11 +110,11 @@ class CartProductItem extends StatelessWidget {
     return Wrap(
                           spacing: 16,
                           children: [
-                            Text('Color: ${cartItem.color ?? ""}',
+                            Text('Color: ${widget.cartItem.color ?? ""}',
                             style: TextStyle(
                               color: Colors.black54
                             ),),
-                            Text('Size: ${cartItem.size ?? ''}',
+                            Text('Size: ${widget.cartItem.size ?? ''}',
                             style: TextStyle(
                               color: Colors.black54
                             ),)
@@ -92,7 +123,7 @@ class CartProductItem extends StatelessWidget {
   }
 
   Widget _buildProductName() {
-    return Text('${cartItem.product?.title ?? ''}',
+    return Text('${widget.cartItem.product?.title ?? ''}',
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.black,

@@ -1,11 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:e_commerce/data/models/cart_model.dart';
 import 'package:e_commerce/data/models/product_details_model.dart';
+import 'package:e_commerce/prsentation/screens/review_list_screen.dart';
 import 'package:e_commerce/prsentation/state_holders/add_to_cart_controller.dart';
 import 'package:e_commerce/prsentation/state_holders/add_to_wish_list_controller.dart';
 import 'package:e_commerce/prsentation/state_holders/product_details_controller.dart';
 import 'package:e_commerce/prsentation/widgets/centered_circular_progress_indicator.dart';
 import 'package:e_commerce/prsentation/widgets/size_picker.dart';
+import 'package:e_commerce/prsentation/widgets/snack_message.dart';
 import 'package:flutter/material.dart';
 
 import 'package:e_commerce/prsentation/utility/app_colors.dart';
@@ -14,6 +16,7 @@ import 'package:e_commerce/prsentation/widgets/product_image_carousel_slider.dar
 import 'package:e_commerce/prsentation/widgets/wish_button.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -142,7 +145,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     Text('${productDetails.product?.star ?? 0}'),
                   ],
                 ),
-                TextButton(onPressed: (){}, child: Text('Review')),
+                TextButton(onPressed: (){
+                  Get.to(() => ReviewListScreen(productId: productDetails.product!.id.toString()));
+                }, child: Text('Review')),
                 GetBuilder<AddToWishListController>(
                   builder: (addToWishListController) {
                     if(addToWishListController.inProgress){
@@ -186,7 +191,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                      size: _selectedSize ?? '', 
                      color: _selectedColor ?? '', 
                      quantity: _counterValue);
-                     addToCartController.addToCart(cartModel);
+                     addToCartController.addToCart(cartModel).then((result){
+                      if(result){
+                        ShowSnackMessage(context, "added to cart");
+                      }
+                      else{
+                        ShowSnackMessage(context, addToCartController.errorMessage);
+                      }
+                     });
                   }, 
                   child: Text('Add to cart'));
                 }

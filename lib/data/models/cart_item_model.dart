@@ -6,7 +6,7 @@ class CartItemModel{
   int? productId;
   String? color;
   String? size;
-  int? qty = 1;
+  int? qty=1;
   String? price;
   String? createdAt;
   String? updatedAt;
