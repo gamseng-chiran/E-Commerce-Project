@@ -39,7 +39,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 SizedBox(height: 16,),
                 ElevatedButton(
                   onPressed: () {
-                    Get.to(()=>MainBottomNavScreen());
+                    if (_formKey.currentState!.validate()) {
+                      Get.to(()=>MainBottomNavScreen());
+                              }  
                 }, child: Text('Complete'))
               ],
             ),
@@ -48,7 +50,6 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       ),
     );
   }
-
   Widget _buildCompleteProfileForm() {
     return Form(
       key: _formKey,
@@ -59,6 +60,12 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         decoration: InputDecoration(
                           hintText: 'First name',
                         ),
+                        validator: (String? value) {
+                    if (value?.trim().isEmpty ?? true) {
+                      return 'Please enter your first name';
+                    }
+                    return null;
+                  },
                       ),
                       SizedBox(height: 8,),
                       TextFormField(
@@ -66,6 +73,12 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         decoration: InputDecoration(
                           hintText: 'Last name',
                         ),
+                        validator: (String? value) {
+                    if (value?.trim().isEmpty ?? true) {
+                      return 'Please enter your last name';
+                    }
+                    return null;
+                  },
                       ),
                       SizedBox(height: 8,),
                       TextFormField(
@@ -73,6 +86,12 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         decoration: InputDecoration(
                           hintText: 'Mobile',
                         ),
+                        validator: (String? value) {
+                    if (value?.trim().isEmpty ?? true) {
+                      return 'Please enter your phone number';
+                    }
+                    return null;
+                  },
                       ),
                       SizedBox(height: 8,),
                       TextFormField(
@@ -80,6 +99,12 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         decoration: InputDecoration(
                           hintText: 'City',
                         ),
+                        validator: (String? value) {
+                    if (value?.trim().isEmpty ?? true) {
+                      return 'Please enter your city name';
+                    }
+                    return null;
+                  },
                       ),
                       SizedBox(height: 8,),
                       TextFormField(
@@ -88,6 +113,12 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         decoration: InputDecoration(
                           hintText: 'Shipping address',
                         ),
+                        validator: (String? value) {
+                    if (value?.trim().isEmpty ?? true) {
+                      return 'Please enter your shipping address';
+                    }
+                    return null;
+                  },
                       ),
                     ],
                   ),
